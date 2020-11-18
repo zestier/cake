@@ -1,0 +1,12 @@
+[build_folder]
+.build/workspaces/cake
+
+[source_folder]
+.
+
+[includedirs]
+inc
+
+# This happens to be mostly useless (with CMake), as CMake is able to find them anyway
+[libdirs]
+.build/workspaces/cake/{{settings.build_type}}

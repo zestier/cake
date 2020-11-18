@@ -1,0 +1,9 @@
+editables:
+  cake/0.1@zestier/test:
+    path: ../.
+  lime/0.1@zestier/test:
+    path: ../../lime
+layout: layout_vs
+generators: cmake_multi
+workspace_generator: cmake
+root: cake/0.1@zestier/test
