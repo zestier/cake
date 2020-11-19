@@ -153,6 +153,19 @@ static void* sdlNativeWindowHandle(SDL_Window* _window, const SDL_SysWMinfo* wmi
 }
 
 inline bool sdlSetWindow(SDL_Window* _window) {
+	SDL_SysWMinfo* pwmi = nullptr;
+
+#if BX_PLATFORM_EMSCRIPTEN
+	// Emscripten is special in that it does not need
+	// and will not provide any SDL_SysWMinfo.
+#else
+	SDL_SysWMinfo wmi;
+	SDL_VERSION(&wmi.version);
+	if (!SDL_GetWindowWMInfo(_window, &wmi))
+		return false;
+	pwmi = &wmi;
+#endif
+
 	bgfx::PlatformData pd;
 	memset(&pd, 0, sizeof(pd));
 #	if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
@@ -163,12 +176,8 @@ inline bool sdlSetWindow(SDL_Window* _window) {
 #		endif
 #	endif // BX_PLATFORM_
 
-	SDL_SysWMinfo wmi;
-	SDL_VERSION(&wmi.version);
-	const auto pwmi = SDL_GetWindowWMInfo(_window, &wmi) ? &wmi : nullptr;
 	pd.nwh = sdlNativeWindowHandle(_window, pwmi);
 	bgfx::setPlatformData(pd);
-
 	return true;
 }
 
